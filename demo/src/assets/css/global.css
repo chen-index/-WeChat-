@@ -1,0 +1,75 @@
+/* 全局样式表*/
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /*min-width: 1366px;*/
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.el-scrollbar__wrap {
+    overflow-x: hidden;
+}
+.el-scrollbar__thumb {
+background: aquamarine;
+}
+/*::-webkit-scrollbar {*/
+/*    width: 0 !important;*/
+/*!*}*!*/
+/*::-webkit-scrollbar {*/
+/*    width: 0 !important;height: 0;*/
+/*}*/
+/*::-webkit-scrollbar {*/
+/*    display: none;*/
+/*}*/
+
+/*@media screen and (min-width: 750px) {*/
+/*    html {*/
+/*        font-size: 75Px!important;*/
+/*    }*/
+/*}*/
+
+
+
+mark {
+    background-color: #fff5f5!important;
+    color: #ff502c  ;
+}
+.hljs {
+    background: #eeeeee;
+    font-size: 14px;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+
+.el-alert {
+    margin-bottom: 20px;
+}
+
+.el-card {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15) !important;
+}
+
+.el-breadcrumb {
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.el-table {
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.el-pagination {
+    margin-top: 15px;
+}
+

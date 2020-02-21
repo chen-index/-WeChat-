@@ -1,0 +1,76 @@
+
+@media screen and (max-width: 800px){
+    .headImgBox {
+        height: 450px!important;
+        margin-bottom: -140px !important;
+    }
+    .h-information {
+        top: 100px!important;
+    }
+    .headBox {
+          display: none!important;
+      }
+    .mobileBox {
+        display: block!important;
+        height: 38px!important;
+        min-height: 38Px!important;
+        line-height: 38Px!important;
+    }
+
+    .l_Box {
+        float: none!important;
+        width: 100%!important;
+    }
+    .r_Box {
+        float: none!important;
+        width: 100%!important;
+    }
+    .r_card {
+        width: 100%!important;
+        margin: 0!important;
+    }
+    .r_card_img {
+        height: auto!important;
+        width: 100%!important;
+    }
+
+    .el-pagination {
+        margin: 50Px auto!important;
+    }
+    /*.row_container {*/
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*justify-content: center;*/
+    /*}*/
+    .el-carousel {
+        margin: 40Px auto!important;
+        width: 85%!important;
+        /*margin-left: 30px!important;*/
+        /*margin-right: 50px!important;*/
+    }
+    .el-card {
+        width: 96%!important;
+        margin: 40Px auto!important;
+        /*margin-left: 30px!important;*/
+        /*margin-right: 50px!important;*/
+    }
+
+    .footer-img > img {
+        max-width: 100%!important;
+    }
+
+    .login_box {
+        width: 90%!important;
+        height: 60% !important;
+    }
+    .login_box_register {
+        width: 90%!important;
+        height: 90% !important;
+    }
+}
+
+
+@media screen and (max-width: 990px){
+
+}
+
