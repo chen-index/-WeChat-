@@ -7,6 +7,10 @@ import VueSocketIO from 'vue-socket.io'
 
 // import 'amfe-flexible'
 
+// Vant
+import Vant from 'vant'
+import 'vant/lib/index.css'
+
 // 导入字体图标
 import './assets/fonts/iconfont.css'
 // 导入全局样式
@@ -33,6 +37,7 @@ axios.interceptors.response.use(config => {
 })
 Vue.prototype.$http = axios
 
+Vue.use(Vant)
 Vue.use(new VueSocketIO({
   debug: true,
   connection: 'http://120.77.79.140:3001/',
@@ -58,22 +63,21 @@ Vue.filter('dateFormat', function (originVal) {
 })
 
 // 挂载路由导航守卫
-router.beforeEach((to, from, next) => {
-  // to 将要访问的路径
-  // from 从哪个路径来
-  // next 下一步
-  // 获取token
-  // const email = window.localStorage.getItem('email')
-  // // const email = window.sessionStorage.getItem('email')
-  // if (to.path === '/server_users' && !email) {
-  //   return next('/login')
-  // }
-
-  // if (!email) {
-  //   return next('/backstage')
-  // }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+// to 将要访问的路径
+// from 从哪个路径来
+// next 下一步
+// 获取token
+// const nickname = window.sessionStorage.getItem('nickname')
+// // const email = window.sessionStorage.getItem('email')
+// if (to.path === '/news' && !nickname) {
+//   return next('/login')
+// }
+// if (!nickname) {
+//   return next('/backstage')
+// }
+// next()
+// })
 
 Vue.config.productionTip = false
 

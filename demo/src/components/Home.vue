@@ -19,15 +19,15 @@
     <div class="content">
       <div class="box" id="hua">
         <div class="content_wx" v-for="(item,i) in socketsMessageList" :key="i">
-          <div :class="item.commentator === user ? 'msgbox_r clearfix' : 'msgbox_l'">
+          <div :class="item.commentator === userForm.nickname ? 'msgbox_r clearfix' : 'msgbox_l'">
             <van-image
-              :class="item.commentator === user ? 'msgbox_img_r' : 'msgbox_img_l'"
+              :class="item.commentator === userForm.nickname ? 'msgbox_img_r' : 'msgbox_img_l'"
               width="48"
               height="48"
-              src="https://img.yzcdn.cn/vant/cat.jpeg"
+              :src="imgUrl + item.picture"
             />
-            <span :class="item.commentator === user ? 'msgbox_title_r' : 'msgbox_title_l'">{{item.commentator}}</span>
-            <div :class="item.commentator === user ? 'chat-bubble_r chat-bubble-right' : 'chat-bubble_l chat-bubble-left'">
+            <span :class="item.commentator === userForm.nickname ? 'msgbox_title_r' : 'msgbox_title_l'">{{item.commentator}}</span>
+            <div :class="item.commentator === userForm.nickname ? 'chat-bubble_r chat-bubble-right' : 'chat-bubble_l chat-bubble-left'">
               {{item.commentContent}}
             </div>
           </div>
@@ -80,7 +80,12 @@ export default {
       messageForm: {
         commentator: '',
         commentDate: Date.now(),
-        commentContent: ''
+        commentContent: '',
+        picture: ''
+      },
+      userForm: {
+        id: '',
+        nickname: ''
       },
       socketsMessageList: [],
       messagelist: [],
@@ -90,7 +95,8 @@ export default {
       loginuser: '',
       loginmsg: false,
       outuser: '',
-      outmsg: false
+      outmsg: false,
+      imgUrl: 'http://120.77.79.140/'
     }
   },
   directives: {
@@ -129,9 +135,9 @@ export default {
   },
   methods: {
     onClickLeft() {
-      this.$router.push('/login')
-      sessionStorage.clear()
-      this.$socket.emit('logout', this.user)
+      this.$router.push('/news')
+      // sessionStorage.clear()
+      this.$socket.emit('logout', this.messageForm.commentator)
     },
     getlogin() {
       this.sockets.subscribe('logincount', (data) => {
@@ -139,7 +145,7 @@ export default {
         this.loginmsg = true
         setTimeout(() => {
           this.loginmsg = false
-        }, 5000)
+        }, 3000)
       })
     },
     getlogout() {
@@ -158,13 +164,22 @@ export default {
         console.log(this.socketsMessageList)
       })
     },
-    getname() {
-      this.user = window.sessionStorage.getItem('name')
-      console.log(this.user)
+    async getname() {
+      this.userForm.id = window.sessionStorage.getItem('_id')
+      const { data: res } = await this.$http.get('users/user', { params: { id: this.userForm.id } })
+      if (res.status !== '200') {
+        return false
+      } else {
+        this.userForm = res.result.users
+        console.log(this.userForm)
+        this.messageForm.commentator = res.result.users.nickname
+        this.userForm.nickname = res.result.users.nickname
+        this.messageForm.picture = res.result.users.picture
+        console.log(this.messageForm.picture)
+      }
     },
     async gomsg() {
       // this.messageForm.commentator = this.$store.state.username
-      this.messageForm.commentator = window.sessionStorage.getItem('name')
       if (this.messageForm.commentContent === '') {
         return this.$notify('不能发送空内容')
       } else {
@@ -190,7 +205,7 @@ export default {
       } else {
         this.messagelist = res.result.reverse()
         this.socketsMessageList = res.result.reverse()
-        // console.log(this.messagelist)
+        console.log(this.messagelist)
       }
     }
 
@@ -349,6 +364,7 @@ export default {
     }
   }
   .van-notice-bar {
-    position: relative;
+    position: fixed;
+    width: 100%;
   }
 </style>

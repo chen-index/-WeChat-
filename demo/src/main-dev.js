@@ -25,6 +25,7 @@ import 'nprogress/nprogress.css'
 import axios from 'axios'
 // 配置请求的根路径
 axios.defaults.baseURL = 'http://localhost:3001/app/'
+// axios.defaults.baseURL = 'http://120.77.79.140:3001/app/'
 // axios请求拦截器
 // 展示Nprogress进度条 Nprogress。start()
 axios.interceptors.request.use(config => {
@@ -69,22 +70,21 @@ Vue.filter('dateFormat', function (originVal) {
 })
 
 // 挂载路由导航守卫
-router.beforeEach((to, from, next) => {
-  // to 将要访问的路径
-  // from 从哪个路径来
-  // next 下一步
-  // 获取token
-  // const email = window.sessionStorage.getItem('email')
-  // const email = window.localStorage.getItem('email')
-  // if (to.path === '/server_users' && !email) {
-  //   return next('/login')
-  // }
-
-  // if (!email) {
-  //   return next('/backstage')
-  // }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+// to 将要访问的路径
+// from 从哪个路径来
+// next 下一步
+// 获取token
+// const nickname = window.sessionStorage.getItem('nickname')
+// // const email = window.sessionStorage.getItem('email')
+// if (to.path === '/news' && !nickname) {
+//   return next('/login')
+// }
+// if (!nickname) {
+//   return next('/backstage')
+// }
+// next()
+// })
 
 Vue.config.productionTip = false
 

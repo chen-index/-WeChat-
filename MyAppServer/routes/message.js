@@ -6,7 +6,7 @@ var Message = require('../models/message')
 
 // 发表评论
 router.post('/messages', async (req, res, next) => {
-    const { commentator, commentDate, commentContent } = req.body
+    const { commentator, commentDate, commentContent, picture } = req.body
     let message = await Message.create(req.body)
     if (message) {
         res.json({

@@ -7,10 +7,17 @@
     />
     <van-form @submit="register">
       <van-field
-        v-model="ruleForm.name"
-        name="名字"
-        label="名字"
-        placeholder="名字"
+        v-model="ruleForm.username"
+        name="用户名"
+        label="用户名"
+        placeholder="请输入用户名"
+        :rules="[{ required: true, message: '请填写名字' }]"
+      />
+      <van-field
+        v-model="ruleForm.nickname"
+        name="昵称"
+        label="昵称"
+        placeholder="请输入昵称"
         :rules="[{ required: true, message: '请填写名字' }]"
       />
       <van-field
@@ -21,6 +28,7 @@
         label="选择器"
         placeholder="点击选择性别"
         @click="showPicker = true"
+        :rules="[{ required: true, message: '请选择性别' }]"
       />
       <van-popup v-model="showPicker" position="bottom">
         <van-picker
@@ -78,9 +86,11 @@ export default {
       columns: ['男', '女'],
       showPicker: false,
       ruleForm: {
-        name: '',
+        username: '',
+        nickname: '',
         gender: '',
-        personality: '暂时没有什么宣言 ~'
+        personality: '暂时没有什么宣言 ~',
+        picture: '/wechat/cat.jpeg'
       }
       // rules: {
       //   name: [
@@ -117,11 +127,12 @@ export default {
         // window.sessionStorage.setItem('gender', res.result.gender)
         // window.sessionStorage.setItem('personality', res.result.personality)
         // window.localStorage.setItem('_id', res.result._id)
-        window.sessionStorage.setItem('name', res.result.name)
+        window.sessionStorage.setItem('username', res.result.username)
+        window.sessionStorage.setItem('nickname', res.result.nickname)
         window.sessionStorage.setItem('gender', res.result.gender)
         window.sessionStorage.setItem('personality', res.result.personality)
         window.sessionStorage.setItem('_id', res.result._id)
-        this.$router.push('/home')
+        this.$router.push('/news')
         console.log(res)
       }
     },

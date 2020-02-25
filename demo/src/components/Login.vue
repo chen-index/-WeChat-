@@ -5,10 +5,27 @@
     </div>
     <div class="context">
       <!-- 输入任意文本 -->
-      <van-field v-model="ruleForm.name" label="姓名" placeholder="请输入姓名"/>
-      <div class="btn">
-        <van-button type="primary" round block @click="login">登录</van-button>
-      </div>
+      <van-form @submit="login">
+        <van-field
+          v-model="ruleForm.username"
+          name="用户名"
+          label="用户名"
+          placeholder="请输入用户名"
+          :rules="[{ required: true, message: '请填写用户名' }]"
+        />
+        <van-field
+          v-model="ruleForm.nickname"
+          name="昵称"
+          label="昵称"
+          placeholder="请输入昵称"
+          :rules="[{ required: true, message: '请填写昵称' }]"
+        />
+        <div style="margin: 16px;">
+          <van-button round block type="primary" native-type="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
     </div>
     <div class="footer_link">
       <span class="gduo" @click="alertMenu">更多</span>
@@ -47,7 +64,8 @@ export default {
         { name: '注册' }
       ],
       ruleForm: {
-        name: ''
+        username: '',
+        nickname: ''
       },
       rules: {
         name: [
@@ -108,7 +126,7 @@ export default {
       const { data: res } = await this.$http.post('users/login', this.ruleForm)
       console.log(res)
       if (res.status !== '200') {
-        return this.$notify('你需要注册一个名字')
+        return this.$notify('用户名或者昵称错误')
         // return this.$message.error('你需要登记进入')
       } else {
         this.$notify({
@@ -125,9 +143,8 @@ export default {
         window.sessionStorage.setItem('personality', res.result.personality)
         window.sessionStorage.setItem('_id', res.result._id)
         window.sessionStorage.setItem('name', res.result.name)
-        this.$router.push('/home')
+        this.$router.push('/wechat')
         // this.$router.push(`/backstage/${this.user._id}`)
-        this.$socket.emit('login', this.ruleForm.name)
       }
     }
   }

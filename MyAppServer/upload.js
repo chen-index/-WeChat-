@@ -9,8 +9,8 @@ var createFolder = function(folder){
         fs.mkdirSync(folder);
     }
 };
-// var uploadFolder = ('/home/images') // 服务器
-var uploadFolder = ('./public/uploads')
+// var uploadFolder = ('/home/images/wechat') // 服务器
+var uploadFolder = ('./public/wechat')
 
 createFolder(uploadFolder);
 

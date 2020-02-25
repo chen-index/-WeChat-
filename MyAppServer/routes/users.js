@@ -4,6 +4,8 @@ var mongoose = require('mongoose')
 var Users = require('../models/user')
 var md5 = require('md5-node')
 var Joi = require('joi')
+var upload = require('../upload')
+var fs = require('fs')
 
 mongoose.set('useCreateIndex', true)
 // mongoose.connect('mongodb://chenhao:19981026@127.0.0.1:27017/myApp',{useUnifiedTopology: true,useNewUrlParser:true})
@@ -25,21 +27,76 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+// 上传图片
+router.post('/upload', upload.single('file'), async (req, res, next) => {
+  var file = req.file;
+  console.log(req.body);
+  console.log(req.file);
+  console.log('文件类型：%s', file.mimetype);
+  console.log('原始文件名：%s', file.originalname);
+  console.log('文件大小：%s', file.size);
+  console.log('文件保存路径：%s', file.path);
+  const _id = req.param('id')
+  const picture = req.param('picture')
+  if (picture !== '/wechat/cat.jpeg') {
+    fs.unlink("/home/images/" + picture,function(error){
+      // fs.unlink("./public/wechat" + picture,function(error){
+      if(error){
+        console.log(error);
+        return false;
+      }
+      console.log('删除文件成功');
+    })
+  }
+  var str = file.path
+  var stra = str.substr(13)
+  // var stra = str.substr(13)
+  console.log(str)
+  console.log(stra)
+  const article = await Users.updateOne({_id: _id}, {
+    picture: stra
+  })
+  if (article) {
+    res.json({
+      status: '200',
+      msg: '上传图片成功',
+      result:{
+        article,
+      }
+    })
+  } else {
+    res.json({
+      status: '400',
+      msg: '上传图片失败'
+    })
+  }
+
+});
+
 // 登录
 router.post('/login', async (req, res, next) => {
-  const { name } = req.body
-  let users = await Users.findOne({name: req.body.name})
+  const { username, nickname } = req.body
+  let users = await Users.findOne({username: req.body.username})
     if (users) {
+      let nick = await Users.findOne({nickname: req.body.nickname})
+      if (nick) {
         res.json({
-            status:'200',
-            msg:'',
-            result:{
-                name:users.name,
-                _id: users._id,
-                gender: users.gender,
-                personality: users.personality,
-            }
+          status:'200',
+          msg:'',
+          result:{
+            username:users.username,
+            nickname:users.nickname,
+            _id: users._id,
+            gender: users.gender,
+            personality: users.personality,
+          }
         });
+      } else {
+        res.json({
+          status:"400",
+          msg:'没有记录过'
+        })
+      }
     } else {
       res.json({
         status:"400",
@@ -63,8 +120,8 @@ router.post('/logout', function (req, res, next) {
 
 //注册用户
 router.post('/register', async (req, res, next) => {
-    const { name, gender, personality } = req.body
-    let user = await Users.findOne({name: req.body.name})
+    const { username, nickname, gender, personality, picture } = req.body
+    let user = await Users.findOne({name: req.body.username})
     // 如果用户已存在
     if (user) {
         return res.json({
@@ -73,19 +130,23 @@ router.post('/register', async (req, res, next) => {
         })
     } else {
         let users = await Users.create({
-            name: name,
+            username: username,
+            nickname: nickname,
             gender: gender,
-            personality: personality
+            personality: personality,
+            picture: picture
         })
         if (users) {
-            req.session.name = users.name
+            req.session.username = users.username
+            req.session.nickname = users.nickname
             req.session.gender = users.gender
             req.session.personality = users.personality
             res.json({
                 status:"200",
                 msg:'注册用户成功',
                 result: {
-                    name:users.name,
+                    username: username,
+                    nickname:users.nickname,
                     gender:users.gender,
                     personality:users.personality,
                     _id: users._id
@@ -162,47 +223,37 @@ router.get('/users', async (req, res, next) => {
   }
 })
 
-//根据id查询用户
+//查询用户
 router.get('/user', async (req, res, next) => {
-    const id = req.param('id')
-    // const id = "5e12c71800bfd015247563d5"
-    if (id) {
-        // 根据id查询数据库
-        let users = await Users.findOne({_id: id})
-        // res.send(users)
-        if (users) {
-            res.json({
-                status: '200',
-                msg: '查询用户成功',
-                result:{
-                    users,
-                }
-            })
-        } else {
-            res.json({
-                status: '400',
-                msg: '查询用户失败'
-            })
-        }
-    }
+  const _id = req.param('id')
+  // 根据id查询数据库
+  console.log(_id)
+  if (_id) {
+    let users = await Users.findOne({_id: _id})
+  if (users) {
+    res.json({
+      status: '200',
+      msg: '查询用户成功',
+      result: {
+        users,
+      }
+    })
+  } else {
+    res.json({
+      status: '400',
+      msg: '查询用户失败'
+    })
+  }
+}
 })
 
 // 根据id修改用户
 router.post('/edituser', async (req, res, next) => {
-    const {username, email, role, _id, userid} = req.body
-    let aduser = await Users.findOne({_id: userid})
-    if (aduser.role !== 'admin') {
-        return res.json({
-            status: '1',
-            msg: '用户权限不够'
+  const { _id, nickname} = req.body
+  let user = await Users.updateOne({_id: _id}, {
+          nickname: nickname,
         })
-    } else if (aduser.role === 'admin') {
-        let user = await Users.updateOne({_id: _id}, {
-            username: username,
-            email: email,
-            role: role
-        })
-        if (user) {
+  if (user) {
             res.json({
                 status: '200',
                 msg: '修改用户成功'
@@ -213,12 +264,6 @@ router.post('/edituser', async (req, res, next) => {
                 msg: '修改用户失败'
             })
         }
-    } else {
-        res.json({
-            status: '444',
-            msg: '修改用户失败'
-        })
-    }
 })
 
 //修改用户状态

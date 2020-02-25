@@ -2,7 +2,11 @@
 const mongoose = require('mongoose')
 // 创建集合规则
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
+        type: String,
+        required: true
+    },
+    nickname: {
         type: String,
         required: true
     },
@@ -11,6 +15,9 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     personality: {
+        type: String
+    },
+    picture: {
         type: String
     }
 })

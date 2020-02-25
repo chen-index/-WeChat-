@@ -11,6 +11,9 @@ const messageSchema = new mongoose.Schema({
     },
     commentContent: {
         type: String,
+    },
+    picture: {
+        type: String
     }
 })
 
